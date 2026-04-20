@@ -1,54 +1,49 @@
-package com.universidad.productosweb.controller;
+package com.universidad.apiproductos.controller;
 
-import com.universidad.productosweb.model.Producto;
-import com.universidad.productosweb.service.ProductoService;
+import com.universidad.apiproductos.model.Producto;
+import com.universidad.apiproductos.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/productos")
-public class ProductoController {
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/productos")
+public class ProductoApiController {
+
     @Autowired
     private ProductoService servicio;
 
-    // GET /productos → lista todos los productos
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("productos", servicio.obtenerTodos());
-        return "productos/lista";
+    public ResponseEntity<List<Producto>> listar() {
+        return ResponseEntity.ok(servicio.obtenerTodos());
     }
 
-    // GET /productos/nuevo → muestra formulario de creación
-    @GetMapping("/nuevo")
-    public String formularioNuevo(Model model) {
-        model.addAttribute("producto", new Producto());
-        model.addAttribute("accion", "Crear");
-        return "productos/formulario";
+    @GetMapping("/{id}")
+    public ResponseEntity<Producto> buscar(@PathVariable Long id) {
+        Producto producto = servicio.obtenerPorIdOError(id);
+        return ResponseEntity.ok(producto);
     }
 
-    // GET /productos/editar/{id} → muestra formulario prellenado
-    @GetMapping("/editar/{id}")
-    public String formularioEditar(@PathVariable Long id, Model model) {
-        Producto producto = servicio.buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + id));
-        model.addAttribute("producto", producto);
-        model.addAttribute("accion", "Editar");
-        return "productos/formulario";
+    @PostMapping
+    public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
+        Producto nuevo = servicio.guardar(producto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    // POST /productos/guardar → guarda y redirige (patrón PRG)
-    @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Producto producto) {
-        servicio.guardar(producto);
-        return "redirect:/productos";
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto producto) {
+        servicio.obtenerPorIdOError(id);
+        producto.setId(id);
+        return ResponseEntity.ok(servicio.guardar(producto));
     }
 
-    // GET /productos/eliminar/{id} → elimina y redirige
-    @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        servicio.obtenerPorIdOError(id);
         servicio.eliminar(id);
-        return "redirect:/productos";
+        return ResponseEntity.noContent().build();
     }
 }

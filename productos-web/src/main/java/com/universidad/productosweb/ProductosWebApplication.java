@@ -1,13 +1,12 @@
-package com.universidad.productosweb;
+package com.universidad.apiproductos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProductosWebApplication {
+public class ApiproductosApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProductosWebApplication.class, args);
+		SpringApplication.run(ApiproductosApplication.class, args);
 	}
-
 }
