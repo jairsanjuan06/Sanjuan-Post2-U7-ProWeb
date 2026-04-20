@@ -1,19 +1,24 @@
-package com.universidad.productosweb.service;
+package com.universidad.apiproductos.service;
 
-import com.universidad.productosweb.model.Producto;
+import com.universidad.apiproductos.model.Producto;
 import org.springframework.stereotype.Service;
-import java.util.*;
 
-@Service // Spring gestiona esta instancia como singleton
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@Service
 public class ProductoService {
+
     private final Map<Long, Producto> productos = new LinkedHashMap<>();
     private Long contadorId = 1L;
 
     public ProductoService() {
-        // Datos de ejemplo para arrancar
         guardar(new Producto(null, "Laptop", "Laptop 15 pulgadas 16GB RAM", 1299.99));
-        guardar(new Producto(null, "Mouse", "Mouse inalámbrico ergonómico", 29.99));
-        guardar(new Producto(null, "Teclado", "Teclado mecánico TKL", 89.99));
+        guardar(new Producto(null, "Mouse", "Mouse inalambrico ergonomico", 29.99));
+        guardar(new Producto(null, "Teclado", "Teclado mecanico TKL", 89.99));
     }
 
     public List<Producto> obtenerTodos() {
@@ -22,6 +27,11 @@ public class ProductoService {
 
     public Optional<Producto> buscarPorId(Long id) {
         return Optional.ofNullable(productos.get(id));
+    }
+
+    public Producto obtenerPorIdOError(Long id) {
+        return buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + id));
     }
 
     public Producto guardar(Producto producto) {

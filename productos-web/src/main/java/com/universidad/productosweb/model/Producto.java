@@ -1,16 +1,15 @@
-package com.universidad.productosweb.model;
+ppackage com.universidad.apiproductos.model;
 
 public class Producto {
+
     private Long id;
     private String nombre;
     private String descripcion;
     private Double precio;
 
-    // Constructor sin argumentos (requerido por Spring)
     public Producto() {
     }
 
-    // Constructor con todos los campos
     public Producto(Long id, String nombre, String descripcion, Double precio) {
         this.id = id;
         this.nombre = nombre;
@@ -18,7 +17,6 @@ public class Producto {
         this.precio = precio;
     }
 
-    // Getters y Setters (necesarios para Thymeleaf)
     public Long getId() {
         return id;
     }
