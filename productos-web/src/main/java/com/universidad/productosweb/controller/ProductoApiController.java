@@ -1,7 +1,7 @@
-package com.universidad.apiproductos.controller;
+package com.universidad.productosweb.controller;
 
-import com.universidad.apiproductos.model.Producto;
-import com.universidad.apiproductos.service.ProductoService;
+import com.universidad.productosweb.model.Producto;
+import com.universidad.productosweb.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
